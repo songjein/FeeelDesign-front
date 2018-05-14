@@ -4,7 +4,7 @@
 span-->
 <template>
 	<div class="container">
-		<h1>업로드 기능 개편 테스트</h1>
+		<h1>업로드 기능 개편 테스트(개발중이어서 갑자기 안될 수도)</h1>
 		<ul>
 			<li>여러 이미지 업로드 (빠른 이어붙이기 가능)</li>
 			<li>선택된 이미지 제거</li>
@@ -13,6 +13,8 @@ span-->
 			<li>정렬 기능</li>
 			<li>캡션 기능</li>
 		</ul>
+		<h3 @click="check" style="cursor:pointer">→ 현재 목록 체크</h3>
+		<h3>→ 업로드 확인하러 가기</h3>
 
 		<input type="file" id="files" ref="files" accept="image/*" multiple @change="handleFilesUpload()"/>
 		<div style="height: 10px"></div>
@@ -31,6 +33,8 @@ span-->
 				<img class="preview" v-if="main_img_idx != key" v-bind:ref="'image' + parseInt( key )" @click="select(key)"/>
 				<br>
 				{{ file.name }} 
+				<span class="mv" @click="mvUp(key)"><b>위로!</b></span>
+				<span class="mv" @click="mvDown(key)"><b>아래로!!</b></span>
 				<span class="remove-file" @click="removeFile(key)">(제거)</span>
 				<div style="height: 10px"></div>
 			</div>	
@@ -101,11 +105,28 @@ export default {
 		},
 		removeFile(key) {
 			this.files.splice(key, 1);	
-			 this.getImagePreviews();
+			this.getImagePreviews();
 		},
 		select(key) {
 			this.main_img_idx = key;	
-		}
+		},
+		check () {
+			console.log("check", this.files);	
+		},
+		mvUp (key) {
+			if (key == 0) return;
+			let tmp = this.files[key - 1];
+			this.files[key - 1] = this.files[key];
+			this.files[key] = tmp;
+			this.getImagePreviews();
+		},
+		mvDown(key) {
+			if (key + 1 == this.files.length) return;
+			let tmp = this.files[key + 1];
+			this.files[key + 1] = this.files[key];
+			this.files[key] = tmp;
+			this.getImagePreviews();
+		},
   }
 }
 </script>
@@ -116,6 +137,7 @@ export default {
 	span.remove-file {
 		color: red;	
 		cursor: pointer;
+		font-weight: bold;
 	}
 	div.file-listing img{
 		max-width: 30%;
@@ -134,5 +156,11 @@ export default {
 	}
 	.selected {
 		border: 7px solid rgb(43,244,226);	
+	}
+	.mv {
+		text-decoration: underline;	
+		font-size: 1.5em;
+		cursor: pointer;
+		color: green;
 	}
 </style>
