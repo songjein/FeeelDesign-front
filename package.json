@@ -2,11 +2,11 @@
   "name": "editor",
   "description": "A Vue.js project",
   "version": "1.0.0",
-  "author": "송제인 <aimaster@zuminternet.com>",
+  "author": "송제인 <jeinsong100@gmail.com>",
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --hot --port=44444 --host=0.0.0.0",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --port 8000 --hot --host 0.0.0.0",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
