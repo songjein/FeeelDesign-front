@@ -33,6 +33,10 @@ span-->
 				<img class="preview" v-if="main_img_idx != key" v-bind:ref="'image' + parseInt( key )" @click="select(key)"/>
 				<br>
 				{{ file.name }} 
+				<div style="color:gray; cursor:pointer;">
+					캡션(미완성): {{ captions[key] }}
+					<input type="text" v-model="captions[key]"/>
+				</div>
 				<span class="mv" @click="mvUp(key)"><b>위로!</b></span>
 				<span class="mv" @click="mvDown(key)"><b>아래로!!</b></span>
 				<span class="remove-file" @click="removeFile(key)">(제거)</span>
@@ -50,7 +54,9 @@ export default {
   data () {
     return {
 			files: [],
-			main_img_idx: 0 
+			captions: [],
+			main_img_idx: 0,
+			EMPTY: "[##CAPTION##EMPTY##]",
     }
   },
   components: {
@@ -58,12 +64,15 @@ export default {
   methods: {
 		init() {
 			this.files =  [];
+			this.captions = [];
 			this.main_img_idx = 0;
 		},
 		handleFilesUpload() {
 			let uploadedFiles = this.$refs.files.files;
 			for (let i = 0 ; i < uploadedFiles.length; i++){
 				this.files.push( uploadedFiles[i] );	
+				if (this.captions.length < this.files.length)
+					this.captions.push(this.EMPTY);
 			}
 			this.getImagePreviews();
 		},
@@ -116,9 +125,11 @@ export default {
 		},
 		removeFile(key) {
 			this.files.splice(key, 1);	
+			this.captions.splice(key, 1);	
 			this.getImagePreviews();
 		},
 		select(key) {
+			alert('메인 이미지 변경');
 			this.main_img_idx = key;	
 		},
 		check () {
@@ -138,6 +149,9 @@ export default {
 			this.files[key] = tmp;
 			this.getImagePreviews();
 		},
+		fillCaption(key) {
+			alert('캡션 작성 기능 추가중');	
+		}
   }
 }
 </script>
