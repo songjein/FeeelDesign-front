@@ -13,8 +13,8 @@ span-->
 			<li>정렬 기능</li>
 			<li>캡션 기능</li>
 		</ul>
-		<h3 @click="check" style="cursor:pointer">→ 현재 목록 체크</h3>
-		<h3>→ 업로드 확인하러 가기</h3>
+		<h3 @click="check" style="cursor:pointer">→ 현재 목록 체크 (F12 console 로 확인)</h3>
+		<h3>→ 업로드 확인하러 가기 (아직)</h3>
 
 		<input type="file" id="files" ref="files" accept="image/*" multiple @change="handleFilesUpload()"/>
 		<div style="height: 10px"></div>
@@ -56,6 +56,10 @@ export default {
   components: {
   },
   methods: {
+		init() {
+			this.files =  [];
+			this.main_img_idx = 0;
+		},
 		handleFilesUpload() {
 			let uploadedFiles = this.$refs.files.files;
 			for (let i = 0 ; i < uploadedFiles.length; i++){
@@ -79,6 +83,10 @@ export default {
 			}	
 		},
 		submitFiles() {
+			if (this.files.length == 0){
+				alert('아무런 파일도 선택 안하셨어요');	
+				return;
+			}
 			let formData = new FormData();
 			
 			for (let i = 0 ; i < this.files.length; i++ ){
@@ -93,10 +101,13 @@ export default {
 						'Content-Type': 'multipart/form-data'
 					}
 				}
-			).then(() => {
+			).then((res) => {
+				alert(res.data);
+				this.init();
 				console.log("Success!");
 			})
 			.catch(() => {
+				alert('에러, 서버가 안켜졌을 수도');
 				console.log("Failure!");
 			});
 		},
